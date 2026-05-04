@@ -21,10 +21,16 @@ namespace RealtyCRM.Api.Controllers
         }
 
         /// <summary>
-        /// Создает новую сделку.
+        /// Оформление новой сделки купли-продажи.
         /// </summary>
+        /// <param name="deal">Объект сделки с указанием ID объекта, клиента, риэлтора и финальной цены.</param>
+        /// <returns>Созданная запись о сделке.</returns>
+        /// <response code="200">Сделка успешно оформлена, статус объекта изменен на Sold.</response>
+        /// <response code="400">Ошибка валидации или неверное состояние объекта (например, уже продан).</response>
         [HttpPost]
-        public async Task<ActionResult<Deal>> Create(Deal deal)
+        [ProducesResponseType(typeof(Deal), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        public async Task<ActionResult<Deal>> Create([FromBody] Deal deal)
         {
             try
             {

@@ -43,16 +43,6 @@ namespace RealtyCRM.Api.Controllers
         }
 
         /// <summary>
-        /// Добавляет новый объект недвижимости.
-        /// </summary>
-        [HttpPost]
-        public async Task<ActionResult> Add(Property property)
-        {
-            await _propertyService.AddPropertyAsync(property);
-            return CreatedAtAction(nameof(GetAll), new { id = property.Id }, property);
-        }
-
-        /// <summary>
         /// Изменяет статус объекта недвижимости.
         /// </summary>
         [HttpPatch("{id}/status")]
