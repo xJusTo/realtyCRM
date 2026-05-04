@@ -1,29 +1,14 @@
-using Microsoft.OpenApi.Models;
 using RealtyCRM.Api.Interfaces;
 using RealtyCRM.Api.Models;
 using RealtyCRM.Api.Repositories;
 using RealtyCRM.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "RealtyCRM API",
-        Version = "v1",
-        Description = "API для управления агентством недвижимости"
-    });
+builder.Services.AddSwaggerGen();
 
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = System.IO.Path.Combine(System.AppContext.BaseDirectory, xmlFile);
-    options.IncludeXmlComments(xmlPath);
-});
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Dependency Injection
 
 // Dependency Injection
 builder.Services.AddSingleton<IRepository<Property>, InMemoryRepository<Property>>();
@@ -35,17 +20,15 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
-app.UseSwaggerUI();
-
-if (app.Environment.IsDevelopment())
+app.UseSwaggerUI(c =>
 {
-    // app.MapOpenApi();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "RealtyCRM API V1");
+    c.RoutePrefix = string.Empty; // Swagger будет доступен по адресу http://localhost:5120/
+});
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection(); // Отключаем редирект, чтобы не мешал на localhost
 
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
