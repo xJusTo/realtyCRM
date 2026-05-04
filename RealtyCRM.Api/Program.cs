@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using RealtyCRM.Api.Interfaces;
 using RealtyCRM.Api.Models;
 using RealtyCRM.Api.Repositories;
@@ -10,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "RealtyCRM API",
         Version = "v1",
@@ -33,10 +34,12 @@ builder.Services.AddScoped<IDealService, DealService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    // app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
