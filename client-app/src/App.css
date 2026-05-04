@@ -184,3 +184,35 @@ body {
   color: var(--text-muted);
   font-size: 0.875rem;
 }
+
+.btn-sell {
+  margin-top: 1rem;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.btn-sell:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.loading, .empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #ef4444;
+  background-color: #fef2f2;
+  border-radius: 12px;
+}

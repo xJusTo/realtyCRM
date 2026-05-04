@@ -13,21 +13,40 @@ const PropertyList: React.FC<Props> = ({ refreshTrigger }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchProperties = async () => {
-            try {
-                const response = await axios.get<Property[]>('/api/properties');
-                setProperties(response.data);
-            } catch (err) {
-                setError('Ошибка при загрузке данных');
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const fetchProperties = async () => {
+        try {
+            const response = await axios.get<Property[]>('/api/properties');
+            setProperties(response.data);
+        } catch (err) {
+            setError('Ошибка при загрузке данных');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchProperties();
     }, [refreshTrigger]);
+
+    const handleCreateDeal = async (property: Property) => {
+        const dealData = {
+            propertyId: property.id,
+            realtorId: 1, // Захардкожено для примера
+            clientId: 1,  // Захардкожено для примера
+            dealDate: new Date().toISOString(),
+            finalPrice: property.price
+        };
+
+        try {
+            await axios.post('/api/deals', dealData);
+            alert(`Объект по адресу "${property.address}" успешно продан!`);
+            fetchProperties(); // Обновляем список
+        } catch (err: any) {
+            const errorMessage = err.response?.data || 'Произошла ошибка при оформлении сделки';
+            alert(errorMessage);
+        }
+    };
 
     const getStatusColor = (status: PropertyStatus) => {
         switch (status) {
@@ -87,6 +106,18 @@ const PropertyList: React.FC<Props> = ({ refreshTrigger }) => {
                             <MapPin size={16} />
                             <span>{property.area} м²</span>
                         </div>
+                        
+                        {property.status === PropertyStatus.Available && (
+                            <button 
+                                className="btn-sell"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleCreateDeal(property);
+                                }}
+                            >
+                                Оформить продажу
+                            </button>
+                        )}
                     </div>
                 </div>
             ))}
