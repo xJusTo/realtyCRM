@@ -219,7 +219,7 @@ body {
 
 /* Navbar Styles */
 .navbar {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
   position: sticky;
@@ -235,18 +235,45 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .navbar-brand {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--primary);
-  letter-spacing: -0.025em;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  height: 38px;
+  display: block;
+}
+
+.navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-main);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.navbar-toggle:hover {
+  background-color: var(--border);
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  margin-left: 2.5rem;
 }
 
 .navbar-links {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .nav-link {
@@ -270,6 +297,79 @@ body {
 .nav-link.active {
   color: var(--primary);
   background-color: #eff6ff;
+}
+
+.navbar-user-profile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-info-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+@media (max-width: 768px) {
+  .navbar-toggle {
+    display: block;
+  }
+
+  .navbar-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    margin-left: 0;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .navbar-menu.is-active {
+    display: flex;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .nav-link {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .navbar-user-profile {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    gap: 1rem;
+  }
+
+  .user-info-text {
+    align-items: flex-start;
+  }
+
+  .btn-logout {
+    justify-content: center;
+    width: 100%;
+  }
 }
 
 /* About Page & Contacts */
@@ -756,6 +856,58 @@ body {
   font-weight: 700;
   color: var(--text-main);
   font-size: 1.05rem;
+}
+
+.property-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.btn-card-edit {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background-color: #f3f4f6;
+  color: var(--text-main);
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.825rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-card-edit:hover {
+  background-color: #e5e7eb;
+  color: var(--text-main);
+}
+
+.btn-card-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background-color: #fee2e2;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.825rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-card-delete:hover {
+  background-color: #fca5a5;
+  color: #b91c1c;
+  border-color: #fca5a5;
 }
 
 .btn-book {

@@ -53,5 +53,15 @@ namespace RealtyCRM.Api.Services
         {
             return _propertyRepository.GetFilteredAsync(type, minPrice, maxPrice, minArea, maxArea, status, realtorId);
         }
+
+        public Task UpdatePropertyAsync(Property property)
+        {
+            return _propertyRepository.UpdateAsync(property);
+        }
+
+        public Task DeletePropertyAsync(int id)
+        {
+            return _propertyRepository.DeleteAsync(id);
+        }
     }
 }

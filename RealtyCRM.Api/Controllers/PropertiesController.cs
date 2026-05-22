@@ -67,5 +67,42 @@ namespace RealtyCRM.Api.Controllers
             await _propertyService.ChangeStatusAsync(id, status);
             return NoContent();
         }
+
+        /// <summary>
+        /// Обновляет параметры объекта недвижимости.
+        /// </summary>
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(int id, [FromBody] Property property)
+        {
+            if (id != property.Id)
+            {
+                return BadRequest("Идентификаторы объекта не совпадают.");
+            }
+
+            var existing = await _propertyService.GetPropertyByIdAsync(id);
+            if (existing == null)
+            {
+                return NotFound("Объект недвижимости не найден.");
+            }
+
+            await _propertyService.UpdatePropertyAsync(property);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Удаляет объект недвижимости.
+        /// </summary>
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var existing = await _propertyService.GetPropertyByIdAsync(id);
+            if (existing == null)
+            {
+                return NotFound("Объект недвижимости не найден.");
+            }
+
+            await _propertyService.DeletePropertyAsync(id);
+            return NoContent();
+        }
     }
 }

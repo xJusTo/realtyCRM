@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { PropertyType, PropertyStatus } from '../types/models';
 import type { Property, Booking, Deal, User } from '../types/models';
-import { PlusCircle, Search, MapPin, Tag, Minimize2, Calendar, Check, X, ShieldAlert, FileText, DollarSign, Percent, BarChart3, UserCheck, Briefcase } from 'lucide-react';
+import { PlusCircle, Search, MapPin, Tag, Minimize2, Calendar, Check, X, ShieldAlert, FileText, DollarSign, Percent, BarChart3, UserCheck, Briefcase, Edit, Trash2 } from 'lucide-react';
 
 const RealtorDashboard: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -18,8 +18,9 @@ const RealtorDashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
 
-  // Modal State for adding property
+  // Modal State for adding/editing property
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -84,11 +85,24 @@ const RealtorDashboard: React.FC = () => {
   }, []);
 
   const handleOpenAddModal = () => {
+    setEditingProperty(null);
+    setShowAddModal(true);
+  };
+
+  const handleOpenEditModal = (property: Property) => {
+    setEditingProperty(property);
+    setAddress(property.address);
+    setDescription(property.description);
+    setPrice(property.price.toString());
+    setArea(property.area.toString());
+    setType(property.type);
+    setPhotoUrl(property.photoUrl || '');
     setShowAddModal(true);
   };
 
   const handleCloseAddModal = () => {
     setShowAddModal(false);
+    setEditingProperty(null);
     setAddress('');
     setDescription('');
     setPrice('');
@@ -97,32 +111,53 @@ const RealtorDashboard: React.FC = () => {
     setPhotoUrl('');
   };
 
-  const handleAddProperty = async (e: React.FormEvent) => {
+  const handleSaveProperty = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentUser.id) return;
 
     setAddLoading(true);
-    const newProperty = {
+    const propertyData = {
+      id: editingProperty ? editingProperty.id : 0,
       address,
       description,
       price: Number(price),
       area: Number(area),
       type: Number(type),
-      status: PropertyStatus.Available,
+      status: editingProperty ? editingProperty.status : PropertyStatus.Available,
       realtorId: currentUser.id,
       photoUrl: photoUrl.trim() || 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=600&q=80'
     };
 
     try {
-      await axios.post('/api/properties', newProperty);
-      alert('Объект недвижимости успешно добавлен!');
+      if (editingProperty) {
+        await axios.put(`/api/properties/${editingProperty.id}`, propertyData);
+        alert('Объект недвижимости успешно обновлен!');
+      } else {
+        await axios.post('/api/properties', propertyData);
+        alert('Объект недвижимости успешно добавлен!');
+      }
       handleCloseAddModal();
       await fetchProperties();
     } catch (err) {
       console.error(err);
-      alert('Ошибка при добавлении объекта.');
+      alert('Ошибка при сохранении объекта.');
     } finally {
       setAddLoading(false);
+    }
+  };
+
+  const handleDeleteProperty = async (propertyId: number) => {
+    if (!window.confirm('Вы уверены, что хотите удалить этот объект недвижимости? Все связанные заявки и сделки также будут удалены.')) {
+      return;
+    }
+
+    try {
+      await axios.delete(`/api/properties/${propertyId}`);
+      alert('Объект недвижимости успешно удален.');
+      await loadAllData();
+    } catch (err) {
+      console.error('Ошибка при удалении объекта', err);
+      alert('Не удалось удалить объект недвижимости.');
     }
   };
 
@@ -359,6 +394,25 @@ const RealtorDashboard: React.FC = () => {
                             <span>{property.area} м²</span>
                           </div>
                         </div>
+
+                        <div className="property-card-actions">
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); handleOpenEditModal(property); }}
+                            className="btn-card-edit"
+                            title="Редактировать"
+                          >
+                            <Edit size={14} />
+                            Редактировать
+                          </button>
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); handleDeleteProperty(property.id); }}
+                            className="btn-card-delete"
+                            title="Удалить"
+                          >
+                            <Trash2 size={14} />
+                            Удалить
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -521,18 +575,18 @@ const RealtorDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Adding property form modal */}
+      {/* Adding/Editing property form modal */}
       {showAddModal && (
         <div className="modal-overlay">
           <div className="modal-card animated-zoom-in">
             <div className="modal-header">
-              <h3>Добавление нового объекта недвижимости</h3>
+              <h3>{editingProperty ? 'Редактирование объекта недвижимости' : 'Добавление нового объекта недвижимости'}</h3>
               <button onClick={handleCloseAddModal} className="btn-close-modal">
                 <X size={20} />
               </button>
             </div>
             
-            <form onSubmit={handleAddProperty} className="modal-form">
+            <form onSubmit={handleSaveProperty} className="modal-form">
               <div className="input-group">
                 <label className="label">Адрес объекта</label>
                 <input 
@@ -622,7 +676,7 @@ const RealtorDashboard: React.FC = () => {
                   className="btn-modal-primary"
                   disabled={addLoading}
                 >
-                  {addLoading ? 'Сохранение...' : 'Опубликовать'}
+                  {addLoading ? 'Сохранение...' : (editingProperty ? 'Сохранить изменения' : 'Опубликовать')}
                 </button>
               </div>
             </form>

@@ -44,5 +44,15 @@ namespace RealtyCRM.Api.Interfaces
             double? maxArea = null,
             PropertyStatus? status = null,
             int? realtorId = null);
+
+        /// <summary>
+        /// Обновляет параметры объекта недвижимости.
+        /// </summary>
+        Task UpdatePropertyAsync(Property property);
+
+        /// <summary>
+        /// Удаляет объект недвижимости.
+        /// </summary>
+        Task DeletePropertyAsync(int id);
     }
 }
