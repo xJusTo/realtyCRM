@@ -519,6 +519,12 @@ body {
   margin-bottom: 2rem;
 }
 
+.auth-logo {
+  height: 48px;
+  margin: 0 auto 0.75rem auto;
+  display: block;
+}
+
 .auth-header h2 {
   font-size: 1.8rem;
   font-weight: 800;

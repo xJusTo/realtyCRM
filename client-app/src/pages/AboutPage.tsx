@@ -1,12 +1,11 @@
-import { Globe, Send, Mail, User, ShieldCheck } from 'lucide-react';
+import { Globe, Send, Mail, User } from 'lucide-react';
 
 const AboutPage = () => {
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
       <div className="about-card">
         <div style={{ marginBottom: '2rem' }}>
-          <ShieldCheck size={64} color="var(--primary)" style={{ marginBottom: '1rem' }} />
-          <h1 className="main-title" style={{ margin: 0 }}>RealtyCRM</h1>
+          <img src="/logo.svg" alt="RealtyCRM Logo" style={{ height: '64px', margin: '0 auto 1rem auto', display: 'block' }} />
           <p style={{ fontWeight: 600, color: 'var(--primary)', marginTop: '0.5rem' }}>
             Система управления недвижимостью
           </p>

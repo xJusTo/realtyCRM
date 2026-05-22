@@ -55,7 +55,7 @@ const AuthPage: React.FC<Props> = ({ onLogin }) => {
     <div className="auth-wrapper">
       <div className="auth-card">
         <div className="auth-header">
-          <h2>🏠 RealtyCRM</h2>
+          <img src="/logo.svg" alt="RealtyCRM Logo" className="auth-logo" />
           <p>Информационная система управления недвижимостью</p>
         </div>
 
