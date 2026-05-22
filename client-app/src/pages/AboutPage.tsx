@@ -1,4 +1,3 @@
-import React from 'react';
 import { Globe, Send, Mail, User, ShieldCheck } from 'lucide-react';
 
 const AboutPage = () => {

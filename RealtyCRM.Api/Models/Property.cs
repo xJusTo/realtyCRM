@@ -44,5 +44,10 @@ namespace RealtyCRM.Api.Models
         /// Идентификатор ответственного риэлтора.
         /// </summary>
         public int RealtorId { get; set; }
+
+        /// <summary>
+        /// Ссылка на фотографию объекта.
+        /// </summary>
+        public string PhotoUrl { get; set; } = string.Empty;
     }
 }

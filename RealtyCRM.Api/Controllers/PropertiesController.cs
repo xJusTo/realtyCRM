@@ -14,21 +14,27 @@ namespace RealtyCRM.Api.Controllers
     public class PropertiesController : ControllerBase
     {
         private readonly IPropertyService _propertyService;
-        private readonly IRepository<Property> _propertyRepository;
 
-        public PropertiesController(IPropertyService propertyService, IRepository<Property> propertyRepository)
+        public PropertiesController(IPropertyService propertyService)
         {
             _propertyService = propertyService;
-            _propertyRepository = propertyRepository;
         }
 
         /// <summary>
-        /// Получает все объекты недвижимости.
+        /// Получает все объекты недвижимости с возможностью фильтрации.
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Property>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Property>>> GetAll(
+            [FromQuery] PropertyType? type = null,
+            [FromQuery] decimal? minPrice = null,
+            [FromQuery] decimal? maxPrice = null,
+            [FromQuery] double? minArea = null,
+            [FromQuery] double? maxArea = null,
+            [FromQuery] PropertyStatus? status = null,
+            [FromQuery] int? realtorId = null)
         {
-            var properties = await _propertyRepository.GetAllAsync();
+            var properties = await _propertyService.GetFilteredPropertiesAsync(
+                type, minPrice, maxPrice, minArea, maxArea, status, realtorId);
             return Ok(properties);
         }
 
@@ -40,6 +46,16 @@ namespace RealtyCRM.Api.Controllers
         {
             var properties = await _propertyService.GetAvailablePropertiesAsync();
             return Ok(properties);
+        }
+
+        /// <summary>
+        /// Добавляет новый объект недвижимости (для риэлторов).
+        /// </summary>
+        [HttpPost]
+        public async Task<ActionResult<Property>> Create([FromBody] Property property)
+        {
+            await _propertyService.AddPropertyAsync(property);
+            return CreatedAtAction(nameof(GetAvailable), new { id = property.Id }, property);
         }
 
         /// <summary>

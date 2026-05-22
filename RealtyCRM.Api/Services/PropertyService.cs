@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using RealtyCRM.Api.Interfaces;
 using RealtyCRM.Api.Models;
@@ -11,17 +10,16 @@ namespace RealtyCRM.Api.Services
     /// </summary>
     public class PropertyService : IPropertyService
     {
-        private readonly IRepository<Property> _propertyRepository;
+        private readonly IPropertyRepository _propertyRepository;
 
-        public PropertyService(IRepository<Property> propertyRepository)
+        public PropertyService(IPropertyRepository propertyRepository)
         {
             _propertyRepository = propertyRepository;
         }
 
         public async Task<IEnumerable<Property>> GetAvailablePropertiesAsync()
         {
-            var all = await _propertyRepository.GetAllAsync();
-            return all.Where(p => p.Status == PropertyStatus.Available);
+            return await _propertyRepository.GetFilteredAsync(status: PropertyStatus.Available);
         }
 
         public Task<Property?> GetPropertyByIdAsync(int id)
@@ -42,6 +40,18 @@ namespace RealtyCRM.Api.Services
                 property.Status = status;
                 await _propertyRepository.UpdateAsync(property);
             }
+        }
+
+        public Task<IEnumerable<Property>> GetFilteredPropertiesAsync(
+            PropertyType? type = null,
+            decimal? minPrice = null,
+            decimal? maxPrice = null,
+            double? minArea = null,
+            double? maxArea = null,
+            PropertyStatus? status = null,
+            int? realtorId = null)
+        {
+            return _propertyRepository.GetFilteredAsync(type, minPrice, maxPrice, minArea, maxArea, status, realtorId);
         }
     }
 }

@@ -14,5 +14,10 @@ namespace RealtyCRM.Api.Interfaces
         /// <param name="deal">Данные сделки.</param>
         /// <returns>Созданная сделка.</returns>
         Task<Deal> CreateDealAsync(Deal deal);
+
+        /// <summary>
+        /// Получает список сделок для конкретного риэлтора.
+        /// </summary>
+        Task<System.Collections.Generic.IEnumerable<Deal>> GetDealsByRealtorAsync(int realtorId);
     }
 }

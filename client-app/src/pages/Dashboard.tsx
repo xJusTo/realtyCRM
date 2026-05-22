@@ -1,21 +1,19 @@
-import { useState } from 'react'
-import PropertyList from '../components/PropertyList'
-import AddPropertyForm from '../components/AddPropertyForm'
+import React from 'react'
+import type { User } from '../types/models'
+import ClientDashboard from './ClientDashboard'
+import RealtorDashboard from './RealtorDashboard'
 
-const Dashboard = () => {
-  const [refreshKey, setRefreshKey] = useState(0);
+interface Props {
+  user: User;
+}
 
-  const handlePropertyAdded = () => {
-    setRefreshKey(prev => prev + 1);
-  };
+const Dashboard: React.FC<Props> = ({ user }) => {
+  if (user.role === 'Realtor') {
+    return <RealtorDashboard />;
+  }
 
-  return (
-    <>
-      <h1 className="main-title">Панель управления RealtyCRM</h1>
-      <AddPropertyForm onPropertyAdded={handlePropertyAdded} />
-      <PropertyList refreshTrigger={refreshKey} />
-    </>
-  );
+  return <ClientDashboard />;
 };
 
 export default Dashboard;
+

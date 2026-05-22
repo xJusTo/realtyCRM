@@ -11,14 +11,14 @@ namespace RealtyCRM.Tests
 {
     public class DealServiceTests
     {
-        private readonly Mock<IRepository<Deal>> _dealRepositoryMock;
-        private readonly Mock<IRepository<Property>> _propertyRepositoryMock;
+        private readonly Mock<IDealRepository> _dealRepositoryMock;
+        private readonly Mock<IPropertyRepository> _propertyRepositoryMock;
         private readonly DealService _dealService;
 
         public DealServiceTests()
         {
-            _dealRepositoryMock = new Mock<IRepository<Deal>>();
-            _propertyRepositoryMock = new Mock<IRepository<Property>>();
+            _dealRepositoryMock = new Mock<IDealRepository>();
+            _propertyRepositoryMock = new Mock<IPropertyRepository>();
             _dealService = new DealService(_dealRepositoryMock.Object, _propertyRepositoryMock.Object);
         }
 

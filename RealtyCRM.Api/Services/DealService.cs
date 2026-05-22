@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using RealtyCRM.Api.Interfaces;
 using RealtyCRM.Api.Models;
@@ -10,10 +11,10 @@ namespace RealtyCRM.Api.Services
     /// </summary>
     public class DealService : IDealService
     {
-        private readonly IRepository<Deal> _dealRepository;
-        private readonly IRepository<Property> _propertyRepository;
+        private readonly IDealRepository _dealRepository;
+        private readonly IPropertyRepository _propertyRepository;
 
-        public DealService(IRepository<Deal> dealRepository, IRepository<Property> propertyRepository)
+        public DealService(IDealRepository dealRepository, IPropertyRepository propertyRepository)
         {
             _dealRepository = dealRepository;
             _propertyRepository = propertyRepository;
@@ -29,6 +30,7 @@ namespace RealtyCRM.Api.Services
             }
 
             // Добавляем сделку
+            deal.DealDate = DateTime.UtcNow;
             await _dealRepository.AddAsync(deal);
 
             // Обновляем статус недвижимости
@@ -36,6 +38,11 @@ namespace RealtyCRM.Api.Services
             await _propertyRepository.UpdateAsync(property);
 
             return deal;
+        }
+
+        public Task<IEnumerable<Deal>> GetDealsByRealtorAsync(int realtorId)
+        {
+            return _dealRepository.GetByRealtorIdAsync(realtorId);
         }
     }
 }

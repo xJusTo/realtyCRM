@@ -1,4 +1,3 @@
-import React from 'react';
 import { ExternalLink, Terminal } from 'lucide-react';
 
 const DevPage = () => {

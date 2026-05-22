@@ -32,5 +32,17 @@ namespace RealtyCRM.Api.Interfaces
         /// <param name="id">Идентификатор объекта.</param>
         /// <param name="status">Новый статус.</param>
         Task ChangeStatusAsync(int id, PropertyStatus status);
+
+        /// <summary>
+        /// Получает отфильтрованный список объектов недвижимости.
+        /// </summary>
+        Task<IEnumerable<Property>> GetFilteredPropertiesAsync(
+            PropertyType? type = null,
+            decimal? minPrice = null,
+            decimal? maxPrice = null,
+            double? minArea = null,
+            double? maxArea = null,
+            PropertyStatus? status = null,
+            int? realtorId = null);
     }
 }

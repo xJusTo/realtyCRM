@@ -88,7 +88,7 @@ const AddPropertyForm: React.FC<Props> = ({ onPropertyAdded }) => {
                     <label className="label">Тип недвижимости</label>
                     <select 
                         value={type} 
-                        onChange={e => setType(Number(e.target.value))} 
+                        onChange={e => setType(Number(e.target.value) as PropertyType)} 
                         className="input-field"
                     >
                         <option value={PropertyType.Apartment}>Квартира</option>
