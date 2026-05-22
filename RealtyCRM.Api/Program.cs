@@ -9,8 +9,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Dependency Injection
-
-// Dependency Injection
 builder.Services.AddSingleton<IRepository<Property>, InMemoryRepository<Property>>();
 builder.Services.AddSingleton<IRepository<Deal>, InMemoryRepository<Deal>>();
 builder.Services.AddScoped<IPropertyService, PropertyService>();
@@ -23,10 +21,9 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "RealtyCRM API V1");
-    c.RoutePrefix = string.Empty; // Swagger будет доступен по адресу http://localhost:5120/
 });
 
-// app.UseHttpsRedirection(); // Отключаем редирект, чтобы не мешал на localhost
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.MapControllers();
